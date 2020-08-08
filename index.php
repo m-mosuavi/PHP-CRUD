@@ -1,4 +1,17 @@
-<?php require_once 'dbconfig.php' ?>
+<?php require_once 'dbconfig.php' ;
+
+if(isset($_REQUEST['del'])){
+    $UserId=intval($_REQUEST['del']);
+    $sql='DELETE FROM USERS WHERE id=:id';
+    $query=$conn->prepare($sql);
+    $query->bindParam(':id',$UserId,PDO::PARAM_INT);
+    $query->execute();
+
+    echo "<scrpit>alert('Deleted!!');</script>";
+    echo "<script>window.location.href='index.php'</script>";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +33,7 @@
             <div class="col-md-12">
                 <h3 class="p-3 pt-5">CRUD</h3>
                 <hr />
-                <a href="#"><button class="btn btn-primary font-16 m-3">وارد کردن رکورد</button></a>
+                <a href="insert.php"><button class="btn btn-primary font-16 m-3">وارد کردن رکورد</button></a>
                 <div class="table-responsive">
                 <table id="mytable" class="table table-bordered table-striped m-2">
                         <thead>
@@ -52,27 +65,27 @@
                                 <?php echo $id++ ?>
                                 </td>
                                 <td>
-                                    <?php echo $result->firstName ?>
+                                    <?php echo htmlentities( $result->firstName) ?>
                                 </td>
                                 <td>
-                                <?php echo $result->lastName ?>
+                                <?php echo htmlentities($result->lastName) ?>
                                 </td>
                                 <td>
-                                <?php echo $result->email ?>
+                                <?php echo htmlentities($result->email) ?>
                                 </td>
                                 <td>
-                                <?php echo $result->phone ?>
+                                <?php echo htmlentities($result->phone) ?>
                                 </td>
                                 <td>
-                                <?php echo $result->address ?>
+                                <?php echo htmlentities($result->address) ?>
                                 </td>
                                 <td>
-                                <?php echo $result->created_at ?>
+                                <?php echo htmlentities($result->created_at) ?>
                                 </td>
 
-                                <td><a href="#"><button class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></button></a></td>
+                                <td><a href="update.php?id=<?php echo $result->id; ?>"><button class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></button></a></td>
 
-                                <td><a href="#"><button class="btn btn-danger" onClick="return confirm('آیا حذف انجام شود');"><span class="glyphicon glyphicon-trash"></span></button></a></td>
+                                <td><a href="index.php?del=<?php echo $result->id; ?>"><button class="btn btn-danger" onClick="return confirm('آیا حذف انجام شود');"><span class="glyphicon glyphicon-trash"></span></button></a></td>
                             </tr>
                             <?php
                             
