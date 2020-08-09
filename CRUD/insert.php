@@ -1,7 +1,5 @@
 <?php
-
-require_once'dbconfig.php';
-
+require_once './DAL/dbContext.php';
 if (isset($_POST['insert'])) {
     $fname = $_POST['firstName'];
     $lname = $_POST['lastName'];
@@ -9,20 +7,13 @@ if (isset($_POST['insert'])) {
     $address = $_POST['address'];
     $phone = intval($_POST['phone']);
 
-    $sql = "INSERT INTO users(firstName,lastName,email,address,phone) VALUES(:firstname,:lastname,:email,:address,:phone)";
-
-    $query = $conn->prepare($sql);
-    $query->bindParam(':firstname', $fname, PDO::PARAM_STR);
-    $query->bindParam(':lastname', $lname, PDO::PARAM_STR);
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->bindParam(':address', $address, PDO::PARAM_STR);
-    $query->bindParam(':phone', $phone, PDO::PARAM_STR);
-    $query->execute();
-
-    $lastInsertId = $conn->lastInsertId();
-
+    // $obj = new dbContext();
+    // $lastInsertId = $obj->Insert($fname, $lname, $email, $address, $phone);
+    // echo $lastInsertId;
+    $obj=new dbContext();
+    $lastInsertId=$obj->Insert($fname, $lname, $email, $address, $phone);
     if ($lastInsertId) {
-        // echo "<script>alert('record insert successfully');</script>";
+        echo "<script>alert('record insert successfully');</script>";
         echo "<script>window.location.href='index.php'</script>";
     } else {
         echo "<script>alert('Error');</script>";
@@ -65,7 +56,7 @@ if (isset($_POST['insert'])) {
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>نام</label>
-                    <input type="text" class="form-control" name="firstName" placeholder="مثال : علی" required  oninvalid="this.setCustomValidity('نام را وارد کنید')">
+                    <input type="text" class="form-control" name="firstName" placeholder="مثال : علی" required oninvalid="this.setCustomValidity('نام را وارد کنید')">
                 </div>
                 <div class="form-group col-md-6">
                     <label>نام خانوادگی</label>
@@ -86,7 +77,7 @@ if (isset($_POST['insert'])) {
                     <textarea class="form-control" name="address" rows="5" required></textarea>
                 </div>
             </div>
-           <input type="submit" class="btn btn-success" value="ثبت" name="insert">
+            <input type="submit" class="btn btn-success" value="ثبت" name="insert">
         </form>
     </div>
 </body>

@@ -1,5 +1,5 @@
 <?php
-require_once'dbconfig.php';
+require_once './DAL/dbContext.php';
 if(isset($_POST['update'])){
 
 
@@ -9,18 +9,20 @@ if(isset($_POST['update'])){
     $email = $_POST['email'];
     $address = $_POST['address'];
     $phone = intval($_POST['phone']);
+    $data=array($userId,$fname,$lname,$email.$address,$phone);
+    // $sql = 'UPDATE users set firstName=:firstname,lastName=:lastname,email=:email,phone=:phone,address=:address WHERE id=:id';
 
-    $sql = 'UPDATE users set firstName=:firstname,lastName=:lastname,email=:email,phone=:phone,address=:address WHERE id=:id';
+    // $query = $conn->prepare($sql);
 
-    $query = $conn->prepare($sql);
-
-    $query->bindParam(':firstname', $fname, PDO::PARAM_STR);
-    $query->bindParam(':lastname', $lname, PDO::PARAM_STR);
-    $query->bindParam(':email', $email, PDO::PARAM_STR);
-    $query->bindParam(':address', $address, PDO::PARAM_STR);
-    $query->bindParam(':phone', $phone, PDO::PARAM_STR);
-    $query->bindParam(':id', $userId, PDO::PARAM_STR);
-    $query->execute();
+    // $query->bindParam(':firstname', $fname, PDO::PARAM_STR);
+    // $query->bindParam(':lastname', $lname, PDO::PARAM_STR);
+    // $query->bindParam(':email', $email, PDO::PARAM_STR);
+    // $query->bindParam(':address', $address, PDO::PARAM_STR);
+    // $query->bindParam(':phone', $phone, PDO::PARAM_STR);
+    // $query->bindParam(':id', $userId, PDO::PARAM_STR);
+    // $query->execute();
+    $obj=new dbContext();
+    $obj->Update($userId,$fname,$lname,$email,$address,$phone);
     echo "<script>alert('record updated successfully');</script>";
     echo "<script>window.location.href='index.php'</script>";
 
@@ -54,12 +56,13 @@ if(isset($_POST['update'])){
         <?php
         
         $userId = intval($_GET['id']);
-        $sql = "SELECT firstName,lastName,email,address,phone,id from users where id=:id";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':id', $userId, PDO::PARAM_STR);
-        $query->execute();
-        $result = $query->fetch();        
-        
+        // $sql = "SELECT firstName,lastName,email,address,phone,id from users where id=:id";
+        // $query = $conn->prepare($sql);
+        // $query->bindParam(':id', $userId, PDO::PARAM_STR);
+        // $query->execute();
+        // $result = $query->fetch();      
+        $obj=new dbContext();
+        $result=$obj->GetById($userId);
         ?>
         <form method="post">
             <div class="form-row">
